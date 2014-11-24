@@ -13,13 +13,12 @@ class RegistrationsController < ApplicationController
   # GET /registrations/new
   def new
     @registration = Registration.new
-    @course = Course.find_by id: params["course_id"]
+    @registration.course = Course.find_by id: params["course_id"]
   end
 
   # POST /registrations
   def create
-    @registration = Registration.new registration_params.merge(email: stripe_params["stripeEmail"],
-                                                               card_token: stripe_params["stripeToken"])
+    @registration = Registration.new registration_params
     @registration.process_payment
     @registration.save
     redirect_to @registration, notice: 'Registration was successfully created.'
@@ -29,9 +28,6 @@ class RegistrationsController < ApplicationController
   end
 
   private
-    def stripe_params
-      params.permit :stripeEmail, :stripeToken
-    end
     # Use callbacks to share common setup or constraints between actions.
     def set_registration
       @registration = Registration.find(params[:id])
@@ -39,6 +35,6 @@ class RegistrationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def registration_params
-      params.require(:registration).permit(:course_id, :full_name, :company, :telephone)
+      params.require(:registration).permit(:course_id, :full_name, :company, :telephone, :email, :card_token)
     end
 end
