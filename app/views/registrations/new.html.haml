@@ -12,7 +12,7 @@
                 - @registration.errors.full_messages.each do |message|
                   %li= message
           .field
-            = f.hidden_field :course_id, value: @course.id
+            = f.hidden_field :course_id, value: @registration.course.id
           .field
             = f.label :full_name
             = f.text_field :full_name
@@ -20,8 +20,31 @@
             = f.label :company
             = f.text_field :company
           .field
+            = f.label :email
+            = f.text_field :email
+          .field
             = f.label :telephone
             = f.text_field :telephone
+
+          #flash-messages
+
+          = javascript_include_tag "https://js.stripe.com/v2/"
+          :javascript
+            Stripe.setPublishableKey('#{Rails.application.secrets.stripe_publishable_key}');
+
+          = label_tag "Card Number", nil, required: true
+          .control-group
+            .controls
+              = text_field_tag :card_number, nil, class: "input-block-level", data: {stripe: "number"}
+
+          = label_tag "Card Verification", nil, required: true
+          .control-group
+            .controls
+              = text_field_tag :card_verification, nil, class: "input-block-level", data: {stripe: "cvv"}
+
+          = label_tag "Card Expires", nil, required: true
+          = select_tag :exp_month, options_for_select(Date::MONTHNAMES.compact.each_with_index.map { |name,i| ["#{i+1} - #{name}", i+1] }), include_blank: false, data: {stripe: "exp-month"}, class: "span2"
+          = select_tag :exp_year, options_for_select((Date.today.year..(Date.today.year+10)).to_a), include_blank: false, data: {stripe: "exp-year"}, class: "span1"
+
           .actions
-            %script.stripe-button{ src: "https://checkout.stripe.com/checkout.js",
-                  data: {amount: @course.price*100, description: @course.name, key: Rails.application.secrets.stripe_publishable_key}}
+            = f.submit "Registration Payment", class: "btn", style: "color: white;background: rgb(242, 118, 73);"
