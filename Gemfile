@@ -39,6 +39,8 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+gem 'stripe'
+
 group :development do
   gem 'guard'
   gem 'guard-livereload'
