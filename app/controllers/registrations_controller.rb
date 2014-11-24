@@ -18,20 +18,20 @@ class RegistrationsController < ApplicationController
 
   # POST /registrations
   def create
-    @registration = Registration.new(registration_params)
-
-    respond_to do |format|
-      if @registration.save
-        format.html { redirect_to @registration, notice: 'Registration was successfully created.' }
-        format.json { render :show, status: :created, location: @registration }
-      else
-        format.html { render :new }
-        format.json { render json: @registration.errors, status: :unprocessable_entity }
-      end
-    end
+    @registration = Registration.new registration_params.merge(email: stripe_params["stripeEmail"],
+                                                               card_token: stripe_params["stripeToken"])
+    @registration.process_payment
+    @registration.save
+    redirect_to @registration, notice: 'Registration was successfully created.'
+  rescue Stripe::CardError => e
+    flash[:error] = e.message
+    render :new
   end
 
   private
+    def stripe_params
+      params.permit :stripeEmail, :stripeToken
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_registration
       @registration = Registration.find(params[:id])
@@ -39,6 +39,6 @@ class RegistrationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def registration_params
-      params.require(:registration).permit(:course_id, :full_name, :company, :email, :telephone)
+      params.require(:registration).permit(:course_id, :full_name, :company, :telephone)
     end
 end
