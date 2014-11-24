@@ -20,10 +20,8 @@
             = f.label :company
             = f.text_field :company
           .field
-            = f.label :email
-            = f.text_field :email
-          .field
             = f.label :telephone
             = f.text_field :telephone
           .actions
-            = f.submit "Registration Payment", class: "btn", style: "color: white;background: rgb(242, 118, 73);"
+            %script.stripe-button{ src: "https://checkout.stripe.com/checkout.js",
+                  data: {amount: @course.price*100, description: @course.name, key: Rails.application.secrets.stripe_publishable_key}}
