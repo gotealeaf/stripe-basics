@@ -39,3 +39,12 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+group :development do
+  gem 'guard'
+  gem 'guard-livereload'
+  gem 'guard-rails'
+  gem 'better_errors'
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-byebug'
+end
