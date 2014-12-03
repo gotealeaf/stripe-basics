@@ -17,6 +17,10 @@ jQuery(function ($) {
     } else {
       token = response.id;
       $form.append($("<input type=\"hidden\" name=\"registration[card_token]\" />").val(token));
+      $("[data-stripe=number]").remove();
+      $("[data-stripe=cvv]").remove();
+      $("[data-stripe=exp-year]").remove();
+      $("[data-stripe=exp-month]").remove();
       $form.get(0).submit();
     }
     return false;
