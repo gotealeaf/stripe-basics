@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141203103538) do
+ActiveRecord::Schema.define(version: 20141204104709) do
 
   create_table "courses", force: true do |t|
     t.string   "name"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20141203103538) do
     t.string   "card_token"
     t.date     "end_date"
     t.string   "customer_id"
+    t.string   "coupon"
   end
 
   add_index "registrations", ["course_id"], name: "index_registrations_on_course_id"

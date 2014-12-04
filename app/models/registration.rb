@@ -2,7 +2,7 @@ class Registration < ActiveRecord::Base
   belongs_to :course
 
   def process_payment
-    customer_data = {email: self.email, card: self.card_token}
+    customer_data = {email: self.email, card: self.card_token, coupon: self.coupon}
                         .merge( (self.course.plan.blank?)? {}: {plan: self.course.plan})
     customer = Stripe::Customer.create customer_data
 

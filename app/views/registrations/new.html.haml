@@ -46,5 +46,10 @@
           = select_tag :exp_month, options_for_select(Date::MONTHNAMES.compact.each_with_index.map { |name,i| ["#{i+1} - #{name}", i+1] }), include_blank: false, data: {stripe: "exp-month"}, class: "span2"
           = select_tag :exp_year, options_for_select((Date.today.year..(Date.today.year+10)).to_a), include_blank: false, data: {stripe: "exp-year"}, class: "span1"
 
+          - unless @registration.course.plan.blank?
+            .field
+              = f.label :coupon
+              = f.text_field :coupon
+
           .actions
             = f.submit "Registration Payment", class: "btn", style: "color: white;background: rgb(242, 118, 73);"
