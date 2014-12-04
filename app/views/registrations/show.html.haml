@@ -1,5 +1,7 @@
 .container
-  %p#notice.alert.alert-success= notice
+  %h1 Registration ticket
+  - if notice
+    %p#notice.alert.alert-success= notice
   %p
     %strong Course:
     = @registration.course.name
@@ -18,4 +20,11 @@
   %p
     %strong Token:
     = @registration.card_token
+  %p
+    %strong Customer Token:
+    = @registration.customer_id
+  - unless @registration.end_date.blank?
+    %p
+      %strong Plan End date:
+      = @registration.end_date
   = link_to 'Back', registrations_path, class: 'btn btn-primary'

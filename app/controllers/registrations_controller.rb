@@ -27,6 +27,17 @@ class RegistrationsController < ApplicationController
     render :new
   end
 
+  # POST /registrations/hook
+  protect_from_forgery except: :hook
+  def hook
+    event = Stripe::Event.retrieve(params["id"])
+    case event.type
+      when "invoice.payment_succeeded" #renew subscription
+        Registration.find_by_customer_id(event.data.object.customer).renew
+    end
+    render status: :ok, json: "success"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_registration

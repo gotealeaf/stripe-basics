@@ -10,6 +10,10 @@ class Registration < ActiveRecord::Base
                           amount: self.course.price*100,
                           description: self.course.name,
                           currency: 'usd'
-    return customer.id
+    self.customer_id = customer.id
+  end
+
+  def renew
+    self.update_attribute :end_date, (Date.today + 1.month)
   end
 end
